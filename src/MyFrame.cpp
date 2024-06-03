@@ -4,10 +4,10 @@ MyFrame::MyFrame(wxWindow* parent, wxWindowID id, const wxString& title, const w
         : wxFrame(parent, id, title, pos, size, style)
 {
     // Tworzenie paneli
-    MainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(900, 800));
-    SidePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(300, 1200));
+    MainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    SidePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     SidePanel->SetBackgroundColour(wxColour(100, 200, 100));
-    BottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(900, 400));
+    BottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     BottomPanel->SetBackgroundColour(wxColour(200, 100, 100));
 
     // Główne sizer'y
@@ -67,11 +67,11 @@ MyFrame::MyFrame(wxWindow* parent, wxWindowID id, const wxString& title, const w
 
     // Dodanie sizer'ów do MainSizer
     MainSizer->Add(leftSideSizer, 3, wxEXPAND);
-    MainSizer->Add(rightSideSizer, 1, wxEXPAND);
+    MainSizer->Add(rightSideSizer, 0, wxEXPAND);
 
     // Ustawienie sizer'a dla ramki
     this->SetSizerAndFit(MainSizer);
-    this->SetMinSize(wxSize(1200, 1200));
+    this->SetMinSize(wxSize(800, 800));
 }
 
 MyFrame::~MyFrame()
