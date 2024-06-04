@@ -1,7 +1,7 @@
 #include "MyFrame.h"
 
 MyFrame::MyFrame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-        : wxFrame(parent, id, title, pos, size, style)
+    : wxFrame(parent, id, title, pos, size, style)
 {
     // Tworzenie paneli
     MainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
