@@ -23,10 +23,10 @@ protected:
         void OptimizeWeights(double(&weights)[4], double angle);
         void DrawGraph(wxDC& dc);
         void DrawGraphAfterRotation();
+        void OnResize(wxSizeEvent& event);
         wxImage InterpolateImage(const wxImage &srcImage, double angle, double (&weights)[4]);
         wxImage Img_Org, Img_Cpy;      // wszystkie zmiany beda wykonywane na tej kopii obrazka
         std::vector <double> errorTab;
-
 public:
 		GUIMyFrame(wxWindow* parent );
         wxDECLARE_EVENT_TABLE();

@@ -12,8 +12,9 @@ GUIMyFrame::GUIMyFrame(wxWindow* parent) : MyFrame(parent), errorTab()
 {
     MainPanel->Bind(wxEVT_PAINT, &GUIMyFrame::OnPaint, this);
     BottomPanel->Bind(wxEVT_PAINT, &GUIMyFrame::OnPaintGraph, this); // Rejestracja zdarzenia rysowania dla BottomPanel
-
+    BottomPanel->Bind(wxEVT_SIZE, &GUIMyFrame::OnResize, this); // Rejestracja zdarzenia zmiany rozmiaru dla BottomPanel
 }
+
 
 void GUIMyFrame::Repaint(wxDC& dc)
 {
@@ -232,7 +233,7 @@ void GUIMyFrame::DrawGraph(wxDC& dc) {
     // Ustawienie osi
     int originX = 50;
     int originY = height - 50;
-
+    int chartHeight = originY - 10;
 
     // Zakresy osi
     double xMax = 100.0; // Oś X kończy się na 100
@@ -246,36 +247,41 @@ void GUIMyFrame::DrawGraph(wxDC& dc) {
     }
 
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(originX, 0, originX, height - 50); // Oś Y
-    dc.DrawLine(50, originY, width, originY); // Oś X
+    dc.DrawLine(originX, 10, originX, height - 40); // Oś Y
+    dc.DrawLine(50, originY, width - 10, originY); // Oś X
 
     //Rysowanie oznaczen osi X
     for (int x = 0; x <= 100; x += 10) {
-        int drawX = originX + static_cast<int>(x * (width - originX) / xMax);
+        int drawX = originX + static_cast<int>(x * (width - originX) / xMax) - (x / 2);
         dc.DrawLine(drawX, originY - 5, drawX, originY + 5); // Małe pionowe kreski
         dc.DrawText(wxString::Format("%d", x), drawX - 5, originY + 10); // Wartości osi X
     }
 
     //Maksymalna wartosc bledu
     yMax = *std::max_element(errorTab.begin(), errorTab.end());
-    if (yMax == 0) yMax = 1; // Zapobieganie dzieleniu przez zero
+    if (yMax == 0) yMax = 1;
 
     for (int i = 0; i <= 10; ++i) {
-        double value = i * yMax / 10; // Wartość na osi Y
-        int drawY = originY - static_cast<int>((value / yMax) * (height - 50));
+        double value = (i * yMax / 10); // Wartość na osi Y
+        int drawY = originY - static_cast<int>((value / yMax) * (height - 60));
         dc.DrawLine(originX - 5, drawY, originX + 5, drawY); // Małe poziome kreski
         dc.DrawText(wxString::Format("%.1f", value), originX - 40, drawY - 5); // Wartości osi Y
     }
 
     // Rysowanie funkcji błędów
-    dc.SetPen(*wxRED_PEN);
+    dc.SetPen(*wxBLACK_PEN);
+    int drawXLast = originX;
+    int drawYLast = originY - static_cast<int>((errorTab[0] / yMax) * (height - 60));;
     for (size_t i = 0; i < errorTab.size() && i < 100; ++i) {
-        int drawX = originX + static_cast<int>(i * (width - originX) / 100.0);
-        int drawY = originY - static_cast<int>((errorTab[i] / yMax) * (height - 50)); // Przeskalowanie punktów
-
+        int drawX = originX + static_cast<int>(i * ((width - originX) / xMax) - (i / 2));
+        int drawY = originY - static_cast<int>((errorTab[i] / yMax) * (height - 60)); // Przeskalowanie punktów
+        
         if (drawX < width && drawY < height && drawY >= 0) {
-            dc.DrawPoint(drawX, drawY);
+            //dc.DrawPoint(drawX, drawY);
+            dc.DrawLine(drawXLast, drawYLast, drawX, drawY);
         }
+        drawXLast = drawX;
+        drawYLast = drawY;
     }
 }
 
@@ -291,3 +297,7 @@ void GUIMyFrame::DrawGraphAfterRotation() {
     }
 }
 
+void GUIMyFrame::OnResize(wxSizeEvent& event) {
+    BottomPanel->Refresh();
+    event.Skip(); // Pozwól na dalsze przetwarzanie zdarzenia
+}
