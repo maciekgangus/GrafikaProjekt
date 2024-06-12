@@ -7,7 +7,7 @@
 class MyFrame : public wxFrame
 {
 	private:
-
+           
 	protected:
 
 

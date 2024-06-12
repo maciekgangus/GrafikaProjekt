@@ -5,10 +5,11 @@ MyFrame::MyFrame(wxWindow* parent, wxWindowID id, const wxString& title, const w
 {
     // Tworzenie paneli
     MainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    MainPanel->SetBackgroundColour(wxColour(100, 200, 100));
     SidePanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     SidePanel->SetBackgroundColour(wxColour(100, 200, 100));
     BottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-    BottomPanel->SetBackgroundColour(wxColour(200, 100, 100));
+    BottomPanel->SetBackgroundColour(wxColour(100, 200, 100));
 
     // Główne sizer'y
     wxBoxSizer* MainSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -24,17 +25,17 @@ MyFrame::MyFrame(wxWindow* parent, wxWindowID id, const wxString& title, const w
     rightSideSizer->Add(SidePanel, 1, wxEXPAND | wxTOP | wxRIGHT | wxBOTTOM, 10);
 
     // Dodanie przycisków i kontrolek do SidePanel
-    LoadBitMapButton = new wxButton(SidePanel, ID_LoadBitMapButton, "Wczytaj bitmapę");
+    LoadBitMapButton = new wxButton(SidePanel, ID_LoadBitMapButton, "Upload bitmap");
     controlsSizer->Add(LoadBitMapButton, 0, wxEXPAND | wxALL, 5);
 
     AngleValue = new wxStaticText(SidePanel, wxID_ANY, "0°");
     controlsSizer->Add(AngleValue, 0, wxALIGN_CENTER | wxALL, 5);
 
     AngleInput = new wxSlider(SidePanel, ID_AngleInput, 0, 0, 360);
-    controlsSizer->Add(new wxStaticText(SidePanel, wxID_ANY, "Kąt obrotu: "), 0, wxALL, 5);
+    controlsSizer->Add(new wxStaticText(SidePanel, wxID_ANY, "Slect angle: "), 0, wxALL, 5);
     controlsSizer->Add(AngleInput, 0, wxEXPAND | wxALL, 5);
 
-    RotateButton = new wxButton(SidePanel, ID_RotateButton, "Obróć");
+    RotateButton = new wxButton(SidePanel, ID_RotateButton, "Rotate");
     controlsSizer->Add(RotateButton, 0, wxEXPAND | wxALL, 5);
 
     // Dodanie tekstu opisowego nad polami tekstowymi
