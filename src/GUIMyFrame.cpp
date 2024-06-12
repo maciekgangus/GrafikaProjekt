@@ -204,10 +204,11 @@ void GUIMyFrame::OnRotate(wxCommandEvent& event)
 
     if (Img_Org.IsOk())
     {
-        DrawGraphAfterRotation();
-
-        OptimizeWeights(weights, angle);
         
+        wxImage test = rotateIMG(Img_Cpy, angle, weights);
+        Img_Cpy = ReverseRotate(test, angle, weights);
+        //OptimizeWeights(weights, angle);
+
         DrawGraphAfterRotation();
         MainPanel->Refresh();
         MainPanel->Update();
@@ -258,7 +259,6 @@ void GUIMyFrame::OptimizeWeights(double(&weights)[4], double angle) {
     }
 
     struct data d = { n, y, sigma, this, angle };
-    wxLogMessage("Początkowe wagi: [%f, %f, %f, %f]", weights[0], weights[1], weights[2], weights[3]);
 
     gsl_multifit_function_fdf f;
     f.f = &expb_f;
@@ -330,12 +330,14 @@ void GUIMyFrame::DrawGraph(wxDC& dc) {
 
 
     if (errorTab.empty()) {
-        return;
+        for (int i = 0; i < 100; i++) {
+            errorTab.push_back(10.0 * i / 2.0);
+        }
     }
-
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine(originX, 10, originX, height - 40); // Oś Y
     dc.DrawLine(50, originY, width - 10, originY); // Oś X
+
 
     //Rysowanie oznaczen osi X
     for (int x = 0; x <= 100; x += 10) {
